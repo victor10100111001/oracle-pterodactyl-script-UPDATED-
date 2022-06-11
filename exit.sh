@@ -18,3 +18,5 @@ echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}
 
 echo -e "${GREEN}INSTALLATION FINISHED!${NC}"
+sleep 4 
+clear
