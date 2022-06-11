@@ -69,8 +69,8 @@ if [ "$INSTALLATION_BOOLEAN" = "yes" ]
 then 
 clear
 echo -e "${YELLOW}Proceeding with installation..${NC}";
-wget https://raw.githubusercontent.com/JmantZZ/oraclepteroinstalltionscript/main/PTpanelinstaller.sh
-bash PTpanelinstaller.sh
+wget https://raw.githubusercontent.com/JmantZZ/oraclepteroinstalltionscript/main/pterodactyl-installer.sh
+bash pterodactyl-installer.sh
 else 
 echo -e "${LRED}Installation failed.${NC}"
 fi
