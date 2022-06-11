@@ -42,6 +42,7 @@ RED='\033[0;31m'
 CYAN='\033[0;36m'
 LRED='\033[1;31m'
 
+sudo apt update
 sudo apt install figlet toilet 
 echo -e "${GREEN}"
 figlet -f slant "JmantZ's Script"
