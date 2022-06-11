@@ -251,7 +251,7 @@ echo -e "${CYAN}>>CREATING SSL CERTIFICATES (NGINX)..${NC}"
 sudo apt update
 sudo apt install -y certbot
 sudo apt install -y python3-certbot-nginx
-certbot --nginx --redirect --no-eff-email --email "$EMAIL" --agree-tos -d "$FQDN_VAR"
+certbot certonly --nginx --email "$EMAIL" --agree-tos -d "$FQDN_VAR"
 certbot renew
 systemctl stop nginx
 certbot renew
