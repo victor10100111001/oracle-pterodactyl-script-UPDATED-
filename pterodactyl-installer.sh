@@ -21,6 +21,7 @@
 #SERVER_IP -ip of the machine
 #DOMAIN_RECORD -domain record
 #EMAIL -SSL Certificate email used
+#FQDN_FOR_NODE -FQDN used in the node
 
 #Ports:
 
@@ -252,6 +253,8 @@ sudo apt update
 sudo apt install -y certbot
 sudo apt install -y python3-certbot-nginx
 certbot certonly --nginx --email "$EMAIL" --agree-tos -d "$FQDN_VAR"
+certbot renew
+certbot certonly --nginx -d "$FQDN_FOR_NODE"
 certbot renew
 systemctl stop nginx
 certbot renew
