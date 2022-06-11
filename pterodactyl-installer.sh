@@ -199,7 +199,7 @@ echo -e "${GREEN}>>FINISHED COPYING DEFAULT ENVIRONMENT SETTINGS FILE!${NC}"
 
 #INSTALLING CORE DEPENDANCIES
 echo -e "${CYAN}>>INSTALLING CORE DEPENDANCIES...${NC}"
-composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader --no-interaction
 echo -e "${GREEN}>>FINISHED INSTALLING CORE DEPENDANCIES!${NC}"
 
 #CREATING ENCRYPTION KEY
