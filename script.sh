@@ -68,8 +68,8 @@ if [ "$INSTALLATION_BOOLEAN" = "yes" ]
 then 
 clear
 echo -e "${YELLOW}Proceeding with installation..${NC}";
-wget https://raw.githubusercontent.com/JmantZZ/oraclepteroinstalltionscript/main/panel-installer.sh
-bash panel-installer.sh
+wget https://raw.githubusercontent.com/JmantZZ/oraclepteroinstalltionscript/main/PTpanelinstaller.sh
+bash PTpanelinstaller.sh
 else 
 echo -e "${LRED}Installation failed.${NC}"
 fi
