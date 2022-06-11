@@ -98,6 +98,21 @@ sleep 2
 echo -e "${CYAN}Extracting panel user configuration info.."
 sleep 2
 
+echo -e "${YELLOW}^What do you want your user username to be?${NC}"
+read USER_NAME
+
+echo -e "${YELLOW}^What do you want your user first name username to be?${NC}"
+read FIRST_NAME
+
+echo -e "${YELLOW}^What do you want your last name to be?${NC}"
+read LAST_NAME
+
+echo -e "${YELLOW}^What do you want your user password to be?${NC}"
+read USER_PASSWORD
+
+echo -e "${YELLOW}^What do you want your user email to be?${NC}"
+read USER_EMAIL
+
 echo -e "${YELLOW}^What do you want your egg author email to be?${NC}"
 read EGG_AUTHOR_EMAIL
 
