@@ -125,16 +125,16 @@ read EGG_AUTHOR_EMAIL
 echo -e "${YELLOW}^Please insert FQDN below without http(s)://${NC}"
 read FQDN_VAR
 
-    echo "Resolving DNS..."
+    echo "${GREEN}Resolving DNS...${NC}"
     SERVER_IP=$(dig +short myip.opendns.com @resolver1.opendns.com -4)
     DOMAIN_RECORD=$(dig +short ${FQDN_VAR})
     if [ "${SERVER_IP}" != "${DOMAIN_RECORD}" ]; then
         echo ""
-        echo -e "${RED}[ERROR] The ${FQDN_VAR} domain does not point to this server."
-        echo -e "${Green}Please retry by re-running the script."
+        echo -e "${RED}[ERROR] The ${FQDN_VAR} domain does not point to this server.${NC}"
+        echo -e "${GREEN}Please retry by re-running the script.${NC}"
         exit 0
     else
-        echo "No issues with the domain, moving on"
+        echo "${GREEN}No issues with the domain, moving on${NC}"
     fi
 sleep 2
 
