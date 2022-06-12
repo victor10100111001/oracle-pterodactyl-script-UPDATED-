@@ -69,7 +69,7 @@ if [ "$INSTALLATION_BOOLEAN" = "yes" ]
 then 
 clear
 echo -e "${YELLOW}Proceeding with installation..${NC}";
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/pterodactyl-installer.sh
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/pterodactyl-installer.sh --no-check-certificate
 bash pterodactyl-installer.sh
 else 
 echo -e "${LRED}Installation failed.${NC}"
