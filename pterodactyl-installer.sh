@@ -212,6 +212,7 @@ echo -e "${CYAN}>>CREATING ENCRYPTION KEY...${NC}"
 php artisan key:generate --force
 echo -e "${GREEN}>>FINISHED CREATING ENCRYPTION KEY!${NC}"
 
+sudo systemctl enable --now redis-server
 #SETTING UP ENVIRONMENTS
 echo -e "${CYAN}>>SETTING UP ENVIRONMENT...${NC}"
 php artisan p:environment:setup -n --author=$EGG_AUTHOR_EMAIL --url=https://$FQDN_VAR --timezone=America/New_York --cache=redis --session=redis --queue=redis --redis-host=127.0.0.1 --redis-pass= --redis-port=6379
