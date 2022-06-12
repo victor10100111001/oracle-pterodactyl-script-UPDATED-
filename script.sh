@@ -44,7 +44,7 @@ LRED='\033[1;31m'
 
 sudo apt update
 sudo apt -y install figlet toilet
-sudo apt autoremove
+sudo apt -y autoremove 
 echo -e "${GREEN}"
 figlet -f slant "JmantZ's Script"
 echo -e "${NC}"
