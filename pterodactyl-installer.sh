@@ -226,6 +226,7 @@ echo -e "${GREEN}>>FINISHED DATABASE SETUP!${NC}"
 echo -e "${CYAN}>>ADDING THE FIRST USER..${NC}"
 php artisan p:user:make --email=$USER_EMAIL --admin=1 --password=$USER_PASSWORD --username=$USER_NAME --name-last=$LAST_NAME --name-first=$FIRST_NAME
 echo -e "${GREEN}>>FINISHED MAKING USER!${NC}"
+systemctl daemon-reload
 
 #SETTING UP PERMISSIONS ON PANEL FILES
 echo -e "${CYAN}>>SETTING UP PERMISSIONS ON PANEL FILES (NGINX)..${NC}"
@@ -237,6 +238,7 @@ crontab -l | {
     echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1"
 } | crontab -
 echo -e "${GREEN}>>FINISHED CONFIGURATION!${NC}"
+systemctl daemon-reload
 
 #CREATING QUEUE WORKER
 echo -e "${CYAN}>>CREATING QUEUE WORKER..${NC}"
@@ -354,6 +356,6 @@ cd /
 echo -e "${GREEN}>>INSTALLATION OF PANEL HAS BEEN COMPLETED. MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
-sleep 4 
+sleep 10
 wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/exit.sh --no-check-certificate
 bash exit.sh
