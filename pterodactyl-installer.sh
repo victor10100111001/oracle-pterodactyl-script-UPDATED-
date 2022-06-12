@@ -172,6 +172,7 @@ echo -e "${CYAN}>>INSTALLING NEEDED DEPENDENCIES..${NC}"
 apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server
 echo -e "${GREEN}>>FINISHED DOWNLOADING DEPENDENCIES!${NC}"
 echo -e "${RED}>>WANRING! MAKE SURE TO ADD THE INGRESS RULES FOR 80,8080,443,2022,25565-25665 TCP and 80,443,2022,25565-25665 UDP FOR MINECRAFT!${NC}"
+systemctl daemon-reload
 sleep 2.5
 
 #INSTALLING COMPOSER
