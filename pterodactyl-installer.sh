@@ -241,7 +241,7 @@ echo -e "${GREEN}>>FINISHED CONFIGURATION!${NC}"
 echo -e "${CYAN}>>CREATING QUEUE WORKER..${NC}"
 cd /
 cd /etc/systemd/system
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/pteroq.service
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/pteroq.service --no-check-certificate
 systemctl enable --now redis-server
 systemctl enable --now pteroq.service
 echo -e "${GREEN}>>FINISHED CREATING QUEUE WORKER!${NC}"
@@ -345,14 +345,14 @@ cd /etc/default/
 mkdir -p /etc/pterodactyl
 curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
 chmod u+x /usr/local/bin/wings
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub --no-check-certificate
 cd / 
 cd /etc/systemd/system
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/wings.service
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/wings.service --no-check-certificate
 cd /
 echo -e "${GREEN}>>INSTALLATION OF PANEL HAS BEEN COMPLETED. MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
 sleep 4 
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/exit.sh
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/exit.sh --no-check-certificate
 bash exit.sh
