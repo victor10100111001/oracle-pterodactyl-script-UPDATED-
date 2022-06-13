@@ -172,7 +172,6 @@ echo -e "${CYAN}>>INSTALLING NEEDED DEPENDENCIES..${NC}"
 apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server
 echo -e "${GREEN}>>FINISHED DOWNLOADING DEPENDENCIES!${NC}"
 echo -e "${RED}>>WANRING! MAKE SURE TO ADD THE INGRESS RULES FOR 80,8080,443,2022,25565-25665 TCP and 80,443,2022,25565-25665 UDP FOR MINECRAFT!${NC}"
-systemctl daemon-reload
 sleep 2.5
 
 #INSTALLING COMPOSER
@@ -210,24 +209,28 @@ echo -e "${GREEN}>>FINISHED INSTALLING CORE DEPENDANCIES!${NC}"
 
 #CREATING ENCRYPTION KEY
 echo -e "${CYAN}>>CREATING ENCRYPTION KEY...${NC}"
+cd /var/www/pterodactyl/
 php artisan key:generate --force
 echo -e "${GREEN}>>FINISHED CREATING ENCRYPTION KEY!${NC}"
 
-sudo systemctl enable --now redis-server
 #SETTING UP ENVIRONMENTS
 echo -e "${CYAN}>>SETTING UP ENVIRONMENT...${NC}"
 php artisan p:environment:setup -n --author=$EGG_AUTHOR_EMAIL --url=https://$FQDN_VAR --timezone=America/New_York --cache=redis --session=redis --queue=redis --redis-host=127.0.0.1 --redis-pass= --redis-port=6379
 echo -e "${GREEN}>>FINISHED SETTING UP ENVIRONMENT!${NC}"
+
 echo -e "${CYAN}>>SETTING UP DATABASE ENVIRONMENT..${NC}"
 php artisan p:environment:database --host=127.0.0.1 --port=3306 --database=$MYSQL_PANEL_NAME --username=$MYSQL_USERNAME --password=$MYSQL_PASSWORD
 echo -e "${GREEN}>>FINISHED SETTING UP DATABASE ENVIRONMENT!${NC}"
+
 echo -e "${CYAN}>>FINISHING DATABASE SETUP..${NC}"
 php artisan migrate --seed --force
 echo -e "${GREEN}>>FINISHED DATABASE SETUP!${NC}"
+
 echo -e "${CYAN}>>ADDING THE FIRST USER..${NC}"
-php artisan p:user:make --email=$USER_EMAIL --admin=1 --password=$USER_PASSWORD --username=$USER_NAME --name-last=$LAST_NAME --name-first=$FIRST_NAME
+cd /var/www/pterodactyl/
+php artisan p:user:make --email="$USER_EMAIL" --admin=1 --password="$USER_PASSWORD" --username="$USER_NAME" --name-last="$LAST_NAME" --name-first="$FIRST_NAME"
+cd /
 echo -e "${GREEN}>>FINISHED MAKING USER!${NC}"
-systemctl daemon-reload
 
 #SETTING UP PERMISSIONS ON PANEL FILES
 echo -e "${CYAN}>>SETTING UP PERMISSIONS ON PANEL FILES (NGINX)..${NC}"
@@ -239,13 +242,12 @@ crontab -l | {
     echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1"
 } | crontab -
 echo -e "${GREEN}>>FINISHED CONFIGURATION!${NC}"
-systemctl daemon-reload
 
 #CREATING QUEUE WORKER
 echo -e "${CYAN}>>CREATING QUEUE WORKER..${NC}"
 cd /
 cd /etc/systemd/system
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/pteroq.service --no-check-certificate
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/pteroq.service
 systemctl enable --now redis-server
 systemctl enable --now pteroq.service
 echo -e "${GREEN}>>FINISHED CREATING QUEUE WORKER!${NC}"
@@ -349,14 +351,14 @@ cd /etc/default/
 mkdir -p /etc/pterodactyl
 curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
 chmod u+x /usr/local/bin/wings
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub --no-check-certificate
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub
 cd / 
 cd /etc/systemd/system
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/wings.service --no-check-certificate
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/wings.service
 cd /
 echo -e "${GREEN}>>INSTALLATION OF PANEL HAS BEEN COMPLETED. MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
-sleep 10
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/exit.sh --no-check-certificate
+sleep 4 
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/exit.sh
 bash exit.sh
