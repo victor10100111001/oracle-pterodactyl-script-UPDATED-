@@ -63,14 +63,14 @@ else
     exit 0 
 fi
 
-sleep 0.5
+
 
 if [ -r /etc/os-release ]; then
         DISTRO="$(. /etc/os-release && echo "$ID")"
         DISTRO_VERSION="$(. /etc/os-release && echo "$VERSION_ID")"
 fi
 
-sleep 0.5
+
 
 if [ "$DISTRO" = "ubuntu" ]; then
     echo -e "${GREEN}ubuntu distro detected..!${NC}";
@@ -80,8 +80,6 @@ else
     echo -e "Distro is ${YELLOW}${DISTRO}${NC}"
     exit 0 
 fi
-
-sleep 0.5
 
 if [ "$DISTRO_VERSION" = "20.04" ]; then 
     echo -e "${GREEN}ubuntu 20.04 version detected..!${NC}";
@@ -141,7 +139,6 @@ read EMAIL
     else
         echo "No issues with the domain, moving on"
     fi
-sleep 2
 
 #IPTABLES
 echo -e "${CYAN}>>CONFIGURING IP TABLES..${NC}"
@@ -359,6 +356,5 @@ cd /
 echo -e "${GREEN}>>INSTALLATION OF PANEL HAS BEEN COMPLETED. MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
-sleep 4 
 wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/exit.sh
 bash exit.sh
