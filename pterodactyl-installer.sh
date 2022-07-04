@@ -37,7 +37,7 @@
 
 #Useful notes
 
-#This script is made for oracle ubuntu 20.04 TLS machines. Make sure ports 80,8080,443,2022,25565-25665,8443 TCP and 80,443,2022,25565-25665,8443 UDP are added in default security list's ingress rules
+#Make sure ports 80,8080,443,2022,25565-25665,8443 TCP and 80,443,2022,25565-25665,8443 UDP are added in default security list's ingress rules
 #The time used for the environment setup is America/New_York the cache is redis, the session is redis, the queue is redis, redis host is localhost, password is none and redis port is 6379
 #For the pterodactyl user, the user made is administrator.
 #PLEASE, DO NOT RUN THE SCRIPT TWICE!
