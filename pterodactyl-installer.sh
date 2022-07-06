@@ -91,7 +91,7 @@ else
 fi
 
 echo -e "${CYAN}Extracting database configuration info.."
-sleep 1
+
 echo -e "${YELLOW}^What do you want your mysql username to be? preferably, use 'pterodactyl'${NC}"
 read MYSQL_USERNAME
 
@@ -100,9 +100,8 @@ read MYSQL_PASSWORD
 
 echo -e "${YELLOW}^What do you want your mysql name to be? preferably use 'panel'${NC}"
 read MYSQL_PANEL_NAME
-sleep 1
+
 echo -e "${CYAN}Extracting panel user configuration info.."
-sleep 1
 
 echo -e "${YELLOW}^What do you want your user username to be?${NC}"
 read USER_NAME
@@ -150,6 +149,7 @@ echo -e "${GREEN}>>FINISHED IP TABLES!${NC}"
 
 #add-apt-repository
 echo -e "${CYAN}>>ADDING "add-apt-repository" COMMAND..${NC}"
+sudo apt update
 apt -y install software-properties-common curl apt-transport-https ca-certificates gnupg
 echo -e "${GREEN}>>FINISHED ADDING "add-apt-repository" COMMAND!${NC}"
 
@@ -166,14 +166,14 @@ echo -e "${GREEN}>>FINISHED DOWNLOADING MARIADB REPO SETUP AND RUNNING IT!${NC}"
 
 #INSTALLING NEEDED DEPENDENCIES
 echo -e "${CYAN}>>INSTALLING NEEDED DEPENDENCIES..${NC}"
-apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server
+apt -y install php8.1 php8.1-{common,cli,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server
 echo -e "${GREEN}>>FINISHED DOWNLOADING DEPENDENCIES!${NC}"
 echo -e "${RED}>>WANRING! MAKE SURE TO ADD THE INGRESS RULES FOR 80,8080,443,2022,25565-25665 TCP and 80,443,2022,25565-25665 UDP FOR MINECRAFT!${NC}"
 sleep 2.5
 
 #INSTALLING COMPOSER
 echo -e "${CYAN}>>INSTALLING COMPOSER..${NC}"
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer 
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 echo -e "${GREEN}>>FINISHED INSTALLING COMPOSER!${NC}"
 echo -e "${CYAN}>>CREATING NEEDED DIRECTORIES..${NC}"
 mkdir -p /var/www/pterodactyl
@@ -206,7 +206,6 @@ echo -e "${GREEN}>>FINISHED INSTALLING CORE DEPENDANCIES!${NC}"
 
 #CREATING ENCRYPTION KEY
 echo -e "${CYAN}>>CREATING ENCRYPTION KEY...${NC}"
-cd /var/www/pterodactyl/
 php artisan key:generate --force
 echo -e "${GREEN}>>FINISHED CREATING ENCRYPTION KEY!${NC}"
 
@@ -216,7 +215,7 @@ php artisan p:environment:setup -n --author=$EGG_AUTHOR_EMAIL --url=https://$FQD
 echo -e "${GREEN}>>FINISHED SETTING UP ENVIRONMENT!${NC}"
 
 echo -e "${CYAN}>>SETTING UP DATABASE ENVIRONMENT..${NC}"
-php artisan p:environment:database --host=127.0.0.1 --port=3306 --database=$MYSQL_PANEL_NAME --username=$MYSQL_USERNAME --password=$MYSQL_PASSWORD
+php artisan p:environment:database --host=127.0.0.1 --port=3306 --database="$MYSQL_PANEL_NAME" --username="$MYSQL_USERNAME" --password="$MYSQL_PASSWORD"
 echo -e "${GREEN}>>FINISHED SETTING UP DATABASE ENVIRONMENT!${NC}"
 
 echo -e "${CYAN}>>FINISHING DATABASE SETUP..${NC}"
@@ -224,9 +223,7 @@ php artisan migrate --seed --force
 echo -e "${GREEN}>>FINISHED DATABASE SETUP!${NC}"
 
 echo -e "${CYAN}>>ADDING THE FIRST USER..${NC}"
-cd /var/www/pterodactyl/
 php artisan p:user:make --email="$USER_EMAIL" --admin=1 --password="$USER_PASSWORD" --username="$USER_NAME" --name-last="$LAST_NAME" --name-first="$FIRST_NAME"
-cd /
 echo -e "${GREEN}>>FINISHED MAKING USER!${NC}"
 
 #SETTING UP PERMISSIONS ON PANEL FILES
@@ -256,12 +253,7 @@ sudo apt update
 sudo apt install -y certbot
 sudo apt install -y python3-certbot-nginx
 certbot certonly --nginx --email "$EMAIL" --agree-tos -d  "$FQDN_VAR" -n
-certbot renew
-certbot certonly --nginx -d "$FQDN_FOR_NODE"
-certbot renew
-systemctl stop nginx
-certbot renew
-systemctl start nginx
+systemctl restart nginx
 echo -e "${GREEN}>>FINISHED CREATING SSL CERTIFICATES!${NC}"
 echo -e "${RED}>>MAKE SURE INGRESS RULES/FIREWAL HAVE BEEN PROPERLY MADE AND THE FQDN POINTS AT THE RIGHT ADDRESS${NC}"
 echo -e "${CYAN}PROCEEDING WITH WEBSERVER CONFIGURATION${NC}"
@@ -280,19 +272,15 @@ server {
     listen 443 ssl http2 default_server;
     listen [::]:443 ssl http2 default_server;
     server_name '"$FQDN_VAR"';
-    
+
     root /var/www/pterodactyl/public;
     index index.php;
-
     access_log /var/log/nginx/pterodactyl.app-access.log;
     error_log  /var/log/nginx/pterodactyl.app-error.log error;
-
     # allow larger file uploads and longer script runtimes
     client_max_body_size 100m;
     client_body_timeout 120s;
-
     sendfile off;
-
     # SSL Configuration
     ssl_certificate /etc/letsencrypt/live/'"$FQDN_VAR"'/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/'"$FQDN_VAR"'/privkey.pem;
@@ -300,7 +288,6 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
     ssl_prefer_server_ciphers on;
-
     add_header Strict-Transport-Security "max-age=15768000; includeSubdomains; preload;";
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "0";
@@ -328,31 +315,29 @@ server {
         fastcgi_read_timeout 300;
         include /etc/nginx/fastcgi_params;
     }
-
     location ~ /\.ht {
         deny all;
     }
 }
 ' | sudo -E tee /etc/nginx/sites-available/pterodactyl.conf >/dev/null 2>&1
     ln -s /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf
-    service nginx restart
+    sudo systemctl restart nginx
 
 echo -e "${CYAN}PROCEEDING WITH DOCKER INSTALLATION${NC}"
 curl -sSL https://get.docker.com/ | CHANNEL=stable bash
 systemctl enable --now docker
 echo -e "${GREEN}>>FINISHED DOCKER INSTALLATION!${NC}"
 echo -e "${CYAN}PROCEEDING WITH WING INSTALLATION${NC}"
-cd /
-cd /etc/default/
-
+rm /etc/default/grub
+cd /etc/default/grub 
+wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub
 mkdir -p /etc/pterodactyl
 curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
 chmod u+x /usr/local/bin/wings
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub
-cd / 
+
 cd /etc/systemd/system
-wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/wings.service
-cd /
+wget https://github.com/JmantZZ/oracle-pterodactyl-script/raw/main/wings.service
+systemctl enable --now wings
 echo -e "${GREEN}>>INSTALLATION OF PANEL HAS BEEN COMPLETED. MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
