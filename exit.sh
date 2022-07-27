@@ -15,7 +15,7 @@ echo -e "${NC}"
 
 apt remove -y figlet toilet
 
-echo -e "${GREEN}>>MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
+echo -e "${GREEN}>>MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug and then systemctl enable --now wings before doing anything else!!!${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
 
