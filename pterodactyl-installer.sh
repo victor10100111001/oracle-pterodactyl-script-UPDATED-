@@ -319,16 +319,17 @@ server {
         deny all;
     }
 }
-' | sudo -E tee /etc/nginx/sites-available/pterodactyl.conf >/dev/null 2>&1
-    ln -s /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf
-    sudo systemctl restart nginx
+'
+sudo -E tee /etc/nginx/sites-available/pterodactyl.conf >/dev/null 2>&1
+ln -s /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf
+sudo systemctl restart nginx
 
 echo -e "${CYAN}PROCEEDING WITH DOCKER INSTALLATION${NC}"
 curl -sSL https://get.docker.com/ | CHANNEL=stable bash
 systemctl enable --now docker
 echo -e "${GREEN}>>FINISHED DOCKER INSTALLATION!${NC}"
 echo -e "${CYAN}PROCEEDING WITH WING INSTALLATION${NC}"
-rm /etc/default/grub
+rm -f /etc/default/grub
 cd /etc/default/grub 
 wget https://raw.githubusercontent.com/JmantZZ/oracle-pterodactyl-script/main/grub
 mkdir -p /etc/pterodactyl
@@ -337,7 +338,6 @@ chmod u+x /usr/local/bin/wings
 
 cd /etc/systemd/system
 wget https://github.com/JmantZZ/oracle-pterodactyl-script/raw/main/wings.service
-systemctl enable --now wings
 echo -e "${GREEN}>>INSTALLATION OF PANEL HAS BEEN COMPLETED. MAKE SURE TO CREATE A NODE AND PASTE THE CONFIGURATION HERE /etc/pterodactyl/config.yml and do wings --debug${NC}"
 echo -e "${GREEN}>>FOR NODE ALLOCATION USE THE IP DOWN BELOW${NC}"
 hostname -I | awk '{print $1}'
